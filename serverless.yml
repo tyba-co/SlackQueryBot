@@ -1,0 +1,44 @@
+service: query-bot
+package:
+  exclude:
+    - 'node_modules/**'
+    - 'ci-scripts/**'
+    - 'resources/**'
+    - 'package.json'
+    - 'package-lock.json'
+    - '*.md'
+
+custom: ${file(resources/config/custom.yml):custom}
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+  stage: ${opt:stage,'local'}
+  memorySize: 256
+  environment:
+    STAGE: ${self:provider.stage}
+    SLACK_CHANNEL: ${self:custom.options.SLACK_CHANNEL.${self:provider.stage}}
+    BOT_ID: ${self:custom.options.BOT_ID.${self:provider.stage}} 
+    DYNAMO_TABLE: ${self:custom.options.DYNAMO_TABLE.${self:provider.stage}} 
+    AUTHORIZED_USERS: ${self:custom.options.AUTHORIZED_USERS.${self:provider.stage}} 
+    AUTHORIZED_NUMBER: ${self:custom.options.AUTHORIZED_NUMBER.${self:provider.stage}} 
+    AUTHORIZED_DELETE: ${self:custom.options.AUTHORIZED_DELETE.${self:provider.stage}} 
+    AUTH_REACTION: ${self:custom.options.AUTH_REACTION.${self:provider.stage}} 
+    DUMBO_SECRET: ${self:custom.options.DUMBO_SECRET.${self:provider.stage}} 
+  vpc: ${self:custom.VPC.${self:provider.stage}}
+  role: ${self:custom.iam-role.${self:provider.stage}}
+
+functions:
+  main-function:
+    handler: lambda_function.lambda_handler
+    maximumRetryAttempts: 0
+    timeout: 30
+    events:
+      - http: POST /
+
+plugins:
+  - serverless-python-requirements
+  - serverless-domain-manager
+
+
+

@@ -1,0 +1,8 @@
+{
+    "name": "dumbo-bot",
+    "dependencies": {
+        "serverless": "^2.19.0",
+        "serverless-domain-manager": "^5.1.0",
+        "serverless-python-requirements": "^5.1.0"
+    }
+}

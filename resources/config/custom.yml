@@ -1,0 +1,49 @@
+custom:
+  pythonRequirements:
+    slim: true
+  customDomain:
+    domainName: tyba.io
+    basePath: ${opt:stage}-dumbo-bot
+    stage: ${opt:stage}
+    createRoute53Record: true
+  VPC:
+    master:
+      securityGroupIds:
+        #- sg-06xxxxxxxxxxxx07    add your vpc security group
+      subnetIds:
+        #- subnet-0xxxxxxxxxxxxxxxx1
+        #- subnet-0xxxxxxxxxxxxxxxx6
+    dev:
+      securityGroupIds:
+        #- sg-06xxxxxxxxxxxx08
+      subnetIds:
+        #- subnet-0xxxxxxxxxxxxxxxx2
+        #- subnet-0xxxxxxxxxxxxxxxx3
+  iam-role:
+    #master: 'arn:aws:iam::' ##Add your Iam Role ARN Here
+    #dev: 'arn:aws:iam::'
+  options:
+    SLACK_CHANNEL:
+      dev: 'Gxxxxxxxxxxx'
+      master: 'Cxxxxxxxxx'
+    BOT_ID:
+      dev: 'Uxxxxxxxxxx'
+      master: 'Uxxxxxxxxx'
+    DYNAMO_TABLE:
+      dev: 'slack-query-dev'
+      master: 'slack-query'
+    AUTHORIZED_USERS:
+      dev: '' # Add a comma separated list of slack user ids
+      master: ''
+    AUTHORIZED_NUMBER: # Number of required reactions to approve in each stage
+      dev: 1
+      master: 2
+    AUTHORIZED_DELETE: # Number of required reactions to approve delete queries in each stage
+      dev: 2
+      master: 3
+    DUMBO_SECRET: #Secret Id on aws SecretsManager for Slack credentials
+      dev: 'DUMBOBOT_DEV'
+      master: 'DUMBOBOT'
+    AUTH_REACTION: # Slack reaction code for approvals 
+      dev: '100'
+      master: '100'
